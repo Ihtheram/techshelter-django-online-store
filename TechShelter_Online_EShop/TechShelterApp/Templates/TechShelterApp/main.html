@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+{% load static %}
+<html style="min-height: 100%;">
+
+<head>
+  <title>TechShelter</title>
+  <link rel="icon" href="media/favicon (9).ico" type="image/gif" sizes="16x16">
+  <!-- RESPONSIVE LAYOUT -->
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="HandheldFriendly" content="true">
+
+  <!-- THEME STYLESHEETS -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/IRMGlowDark.css' %}">
+
+  <!-- Font STYLESHEETS / SCRIPTS -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Hanalei+Fill|Iceland|Josefin+Sans|Play|Racing+Sans+One|Wallpoet|Frosw|Righteous&display=swap">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+
+  <!-- JS for ADDING TO CART -->
+  <script type="text/javascript">
+    var user = '{{request.user}}'
+
+    function getCsrfToken(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    const csrftoken = getCsrfToken('csrftoken');
+  </script>
+
+</head>
+
+<body style="min-height: 100%;">
+  <!-- MENU BAR -->
+  <div class="menubar"
+    style="position: fixed; padding: 0px; width: 100%;  float: left; align-content: initial;background-color: rgba(77, 77, 77, 0);z-index: 2;">
+
+    <div class="logo_div">
+      <i id="menuicon" class="fa fa-bars menuicon" style="cursor: pointer;" onclick="menuFunction()"></i>
+      <a class="storelink" href="{% url 'tech_shelter' %}">
+        <h1 class="logotext"> TECHSHELTER <span style=" padding-bottom: 5px;font-family: 'Righteous';"> Online EStore </span></h1>
+      </a>
+
+      <!-- Menu Links MOBILE -->
+      <div id="menuLinks" class="menu-contents" style="font-size: 20px; padding: 10px 20px;"></br>
+
+      </div>
+
+      <script>
+        function menuFunction() {
+          var x = document.getElementById("menuLinks");
+          var b = document.getElementById("block-contents");
+          if (x.style.display === "block") {
+            x.style.display = "none";
+            b.style.filter = "blur(0px)";
+          } else {
+            x.style.display = "block";
+            b.style.filter = "blur(3px)";
+
+          }
+        }
+      </script>
+
+    </div> <!-- LOGO DIV ENDS -->
+
+    <div style="width: 100%; background-color: rgba(255, 255, 255, 0.048); z-index: 3;height: 75px;">
+      
+      <!-- Menu Links DESKTOP -->
+      <div class="menubar_div-content">
+
+      </div>
+
+      <div class="user_div">
+
+        <div class="usermenu">
+
+          <!-- PROFILE PICTURE DESKTOP-->
+          <img onclick="usermenuFunction()" class="user" src="{{user.imageURL}}"
+            style="float: right; width: 70px; border-radius: 100px; margin: 10px;"></img>
+
+
+
+
+
+          <!-- Desktop login and signup buttons -->
+          <div id='desktop-userbuttons' class="menubar_div-content">
+            {% if request.user.is_authenticated %}
+
+            {% else %}
+            <a class="menu_link" style="float: right;" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Log in
+            </a>
+            <a class="menu_link" style="float: right;" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i>
+              Sign up</a>
+            {% endif %}
+
+
+          </div>
+
+
+        </div>
+                 
+        <script>
+          /* When the user clicks on the button, 
+          toggle between hiding and showing the dropdown content */
+          function usermenuFunction() {
+            document.getElementById("userDropdown").classList.toggle("show");
+            
+            var b = document.getElementById("block-contents");
+            if (userDropdown.classList.contains('show')) {
+                  b.style.filter = "blur(2px)";
+                }if(!userDropdown.classList.contains('show'))
+                {b.style.filter = "blur(0px)";}
+          }
+
+
+          // Close the dropdown if the user clicks outside of it
+          window.onclick = function (event) {
+
+            if (!event.target.matches('.user')) {
+              var dropdowns = document.getElementsByClassName("usermenu-content");
+              var menudropdowns = document.getElementsByClassName("menu-contents");
+              var i, j;
+              var b = document.getElementById("block-contents");
+              for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                  openDropdown.classList.remove('show');
+                  b.style.filter = "blur(0px)";
+                }
+              }
+          }
+          if (!event.target.matches('.menuicon')) {
+          var x = document.getElementById("menuLinks");
+          var b = document.getElementById("block-contents");
+                if (x.style.display === "block") {
+                    x.style.display = "none";
+                    b.style.filter = "blur(0px)";
+              }
+          }
+          }
+          
+
+        </script>
+      </div>
+ <!-- User drop down menu -->
+ <div id="userDropdown" class="usermenu-content">
+  <H1
+    style="margin: 0%; padding: 0%; font-size: 22px; color: white; text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+    {{user.username}}</H1>
+  {% if request.user.is_authenticated %}
+  <H1
+    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+    {{user.email}}</H1>
+  <H1
+    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+    {{user.usertype}}</H1>
+  <hr>
+
+  <div id="udiv3" style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
+
+
+    <a class="logout" href="http://127.0.0.1:8000/admin/logout/"><i class="fa">&#xf2f5;</i> Logout</a>
+  </div>
+  {% else %}
+  <H1
+    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+    Not logged in</H1>
+  <hr>
+  <div id='udiv2' style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
+    <a class="uopt" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i> Signup </a>
+    </br>
+    <a class="uopt" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Login </a>
+  </div>
+  {% endif %}
+</div>
+
+    </div>
+  </div>
+  <!-- /MENU BAR -->
+
+
+  <!-- OTHER PAGES SHOW HERE -->
+  <div id="block-contents" class='block-contents'>
+    <br>
+    {% block content %}
+
+    {% endblock content %}
+  </div>
+
+  <footer>
+    <small><p>
+        &copy; IRMTech.Inc  
+      </p>
+    </small>
+  <footer>
+
+</body>
+</html>
