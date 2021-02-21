@@ -47,10 +47,14 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse('tech_shelter')
+            return HttpResponse('TechShelterApp/tech_shelter.html')
     else:
         form = CustomUserCreationForm()
     
     return render(request, 'registration/signup.html', {
 			'user': user,'form':form
 	    })
+
+def logout(request):
+    logout(request)
+    return HttpResponse('TechShelterApp/tech_shelter.html')

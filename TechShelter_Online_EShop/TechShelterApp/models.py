@@ -15,7 +15,7 @@ class User(AbstractUser):
     usertype = models.CharField(max_length=8,choices=USER_TYPE_CHOICES,default=CUSTOMER)
 
     def __str__(self):
-    	return self.name
+    	return self.username
 	
     # User profile picture
     @property

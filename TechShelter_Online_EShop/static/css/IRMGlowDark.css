@@ -47,8 +47,8 @@ body {
 	box-shadow: 2px 2px 20px rgba(0, 0, 0, 0.267), 2px 2px 30px rgba(0, 0, 0, 0.253), 2px 2px 40px rgba(0, 0, 0, 0.274);
 	float: left;
 	transition-duration: 1.2s;
-	height: 120px;
-	width: 170px;
+	height: 100px;
+	width: 190px;
 	clear: both;
 	overflow:visible;
 	margin: 0px;
@@ -84,7 +84,7 @@ body {
 
 .logotext {
 	clear: both;
-	font-size: 38px;
+	font-size: 30.3px;
 	padding-left: 5px;;
 	padding-right: 5px;;
 	margin: 0px;

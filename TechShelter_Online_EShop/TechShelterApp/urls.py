@@ -7,5 +7,6 @@ urlpatterns = [
     path('', views.tech_shelter, name='tech_shelter'),
 
     path('signup/', views.signup, name='signup'),
+    path('logout/', views.logout, name='logout'),
     path('accounts/', include('django.contrib.auth.urls')),
 ]

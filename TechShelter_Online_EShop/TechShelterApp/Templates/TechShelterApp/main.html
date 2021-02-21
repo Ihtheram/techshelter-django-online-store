@@ -16,7 +16,7 @@
 
   <!-- Font STYLESHEETS / SCRIPTS -->
   <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Hanalei+Fill|Iceland|Josefin+Sans|Play|Racing+Sans+One|Wallpoet|Frosw|Righteous&display=swap">
+    href="https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Hanalei+Fill|Iceland|Josefin+Sans|Play|Racing+Sans+One|Wallpoet|Frosw|Righteous|Jura&display=swap">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -55,7 +55,7 @@
     <div class="logo_div">
       <i id="menuicon" class="fa fa-bars menuicon" style="cursor: pointer;" onclick="menuFunction()"></i>
       <a class="storelink" href="{% url 'tech_shelter' %}">
-        <h1 class="logotext"> TECHSHELTER <span style=" padding-bottom: 5px;font-family: 'Righteous';"> Online EStore </span></h1>
+        <h1 class="logotext"> TECHSHELTER <span style="padding-bottom: 5px; font-family: 'Jura'; font-size: 14px;"> O n l i n e &nbsp; T e c h s t o r e </span></h1>
       </a>
 
       <!-- Menu Links MOBILE -->
@@ -176,7 +176,7 @@
   <div id="udiv3" style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
 
 
-    <a class="logout" href="http://127.0.0.1:8000/admin/logout/"><i class="fa">&#xf2f5;</i> Logout</a>
+    <a class="logout" href="{% url 'logout' %}"><i class="fa">&#xf2f5;</i> Log out</a>
   </div>
   {% else %}
   <H1
