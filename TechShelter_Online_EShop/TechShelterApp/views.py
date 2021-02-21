@@ -2,19 +2,26 @@ from django.shortcuts import render, redirect
 
 from .models import User
 
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from TechShelterApp.models import User
+# from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import CustomUserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+from django.http import HttpResponse, Http404
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 def tech_shelter(request):
 
     if request.user.is_authenticated:
-        user=request.user
-        
+        user = request.user        
     else:
         user = {
-			'name':'guest',
+			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
@@ -37,12 +44,13 @@ def signup(request):
 		}
 
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('tech_shelter')
+            return HttpResponse('tech_shelter')
     else:
-        form = UserCreationForm()
-        return render(request, 'registration/signup.html', {
+        form = CustomUserCreationForm()
+    
+    return render(request, 'registration/signup.html', {
 			'user': user,'form':form
 	    })

@@ -1,5 +1,23 @@
 from django.contrib import admin
 
 from .models import User
+from .forms import CustomUserCreationForm
+from django.contrib.auth.admin import UserAdmin
 
-admin.site.register(User)
+class CustomUserAdmin(UserAdmin):
+    model=User
+    add_form=CustomUserCreationForm
+
+    fieldsets = (
+        *UserAdmin.fieldsets, (
+            'More Information', {
+                'fields': (
+                    'image',
+                    'location',
+                    'usertype'
+                )
+            }
+        )
+    )
+
+admin.site.register(User, CustomUserAdmin)
