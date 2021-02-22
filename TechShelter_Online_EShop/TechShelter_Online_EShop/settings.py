@@ -37,8 +37,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'crispy_forms',
     'TechShelterApp.apps.TechshelterappConfig',
+    'crispy_forms',
+    'widget_tweaks',
 
     'django.contrib.admin',
     'django.contrib.auth',

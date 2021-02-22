@@ -11,4 +11,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     path('users/', views.users, name='users'),
+    path('editprofile/', views.editprofile, name='editprofile'),
 ]

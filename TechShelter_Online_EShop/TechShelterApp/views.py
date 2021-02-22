@@ -5,7 +5,7 @@ from .models import User
 from TechShelterApp.models import User
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -69,3 +69,24 @@ def users(request):
     context = {'users':users}
     return render(request, 'TechShelterApp/users.html',context)
 
+def editprofile(request):
+    form = UserForm()
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        #to see what info are input, in console, uncomment the line below
+        #print('Printing POST:', request.POST)
+        form = UserForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+    
+    if request.method == 'FILES':
+        #to see what info are input, in console, uncomment the line below
+        #print('Printing POST:', request.POST)
+        form = UserForm(request.FILES, instance=user)
+        if form.is_valid():
+            form.update()
+    
+    context = {'form':form, 'user':user}
+    return render(request, 'TechShelterApp/editprofile.html',context)
