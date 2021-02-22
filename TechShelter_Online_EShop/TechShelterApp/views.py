@@ -58,3 +58,14 @@ def signup(request):
 def logout(request):
     logout(request)
     return HttpResponse('TechShelterApp/tech_shelter.html')
+
+def users(request):
+
+    if request.user.is_superuser:
+        users = User.objects.all()       
+    else:
+        users = {}
+       
+    context = {'users':users}
+    return render(request, 'TechShelterApp/users.html',context)
+
