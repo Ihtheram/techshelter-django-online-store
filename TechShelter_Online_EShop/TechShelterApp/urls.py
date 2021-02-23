@@ -11,5 +11,8 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
 
     path('users/', views.users, name='users'),
-    path('editprofile/', views.editprofile, name='editprofile'),
+    path('editprofile/<int:userID>', views.editprofile, name='editprofile'),
+    path('deleteprofile/<int:userID>', views.deleteprofile, name='deleteprofile'),
+    path('deactivateprofile/<int:userID>', views.deactivateprofile, name='deactivateprofile'),
+    
 ]

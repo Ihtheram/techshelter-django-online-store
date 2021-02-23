@@ -53,12 +53,23 @@
 			<input class="pluscart" type="submit" name="submit" value="Save Changes" style="margin: 30px 0px; width: fit-content;">
 			
 			<!-- DELETE BUTTON -->
-			<a class="deletebtn" href="#">
+			{% if logged_in_user.is_superuser %}
+			<a class="deletebtn" href="{% url 'deleteprofile' user.id %}">
 
-					<i class="glyphicon glyphicon-trash" style="font-size: 20px; width: fit-content;"></i>
-					Deactivate Account
+				<i class="glyphicon glyphicon-trash" style="font-size: 20px; width: fit-content;"></i>
+				Delete Account
 
 			</a>
+			{% endif %}
+			<a class="deletebtn" href="{% url 'deactivateprofile' user.id %}">
+
+				<i class="glyphicon glyphicon-trash" style="font-size: 20px; width: fit-content;"></i>
+				Deactivate Account
+
+			</a>
+
+    </h4>
+
 			
 		</form>
 

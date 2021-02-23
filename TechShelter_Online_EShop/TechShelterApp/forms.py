@@ -12,7 +12,12 @@ class CustomUserCreationForm(UserCreationForm):
       # fields = "__all__"
 
 
-class UserForm(ModelForm):
+class UserUpdateForm(ModelForm):
     class Meta:
         model = User
         fields = ("image", "username", "first_name", "last_name", "email", "location")
+
+class Admin_UserUpdateForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ("image", "username", "usertype", "first_name", "last_name", "email", "location", "groups", "user_permissions", "is_staff", "is_active", "is_superuser")

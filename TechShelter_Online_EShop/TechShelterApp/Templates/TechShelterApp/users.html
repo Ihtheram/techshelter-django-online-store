@@ -28,7 +28,8 @@
 
             {% for user in users %}
             {% if user.is_superuser %}
-			<div class="cart-row" style="color: white;">
+			<a href="{% url 'editprofile' user.id %}">
+				<div class="cart-row" style="color: white;">
 				<div style="flex:1"><img class="row-image" style="height:25px;width:25px;" src="{{user.imageURL}}"></div>
 				<div style="flex:1">
 					<p>{{user.username}}</p>
@@ -43,6 +44,7 @@
 					{% if user.is_active %}<p style="color: green;">Active</p>{% elif not user.is_active %}<p style="color: gray;">Not Active</p>{% else %}<p style="color: gray;">Hidden </p>{% endif %}
 				</div>
             </div>
+			</a>
             {% endif %}
 			{% endfor %}
 		</br>
@@ -56,6 +58,7 @@
 
             {% for user in users %}
             {% if user.is_staff and not user.is_superuser %}
+			<a href="{% url 'editprofile' user.id %}">
 			<div class="cart-row" style="color: white;">
 				<div style="flex:1"><img class="row-image" style="height:25px;width:25px;" src="{{user.imageURL}}"></div>
 				<div style="flex:1">
@@ -71,6 +74,7 @@
 					{% if user.is_active %}<p style="color: green;">Active</p>{% elif not user.is_active %}<p style="color: gray;">Not Active</p>{% else %}<p style="color: gray;">Hidden </p>{% endif %}
 				</div>
             </div>
+			</a>
             {% endif %}
 			{% endfor %}
 
@@ -85,6 +89,7 @@
 
             {% for user in users %}
             {% if user.usertype == "Seller" %}
+			<a href="{% url 'editprofile' user.id %}">
 			<div class="cart-row" style="color: white;">
 				<div style="flex:1"><img class="row-image" style="height:25px;width:25px;" src="{{user.imageURL}}"></div>
 				<div style="flex:1">
@@ -100,6 +105,7 @@
 					{% if user.is_active %}<p style="color: green;">Active</p>{% elif not user.is_active %}<p style="color: gray;">Not Active</p>{% else %}<p style="color: gray;">Hidden </p>{% endif %}
 				</div>
             </div>
+			</a>
             {% endif %}
 			{% endfor %}
 
@@ -114,6 +120,7 @@
 
             {% for user in users %}
             {% if user.usertype == "Customer" %}
+			<a href="{% url 'editprofile' user.id %}">
 			<div class="cart-row" style="color: white;">
 				<div style="flex:1"><img class="row-image" style="height:25px;width:25px;" src="{{user.imageURL}}"></div>
 				<div style="flex:1">
@@ -129,6 +136,7 @@
 					{% if user.is_active %}<p style="color: green;">Active</p>{% elif not user.is_active %}<p style="color: gray;">Not Active</p>{% else %}<p style="color: gray;">Hidden </p>{% endif %}
 				</div>
             </div>
+			</a>
             {% endif %}
 			{% endfor %}
 		
