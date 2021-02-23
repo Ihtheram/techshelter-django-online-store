@@ -566,6 +566,7 @@ footer {
     float: left;
     box-sizing: content-box;
     background-color: #0084ff00;
+	width: 100%;
   }
 
 .itemsrow {

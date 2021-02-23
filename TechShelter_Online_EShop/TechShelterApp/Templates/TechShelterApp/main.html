@@ -60,7 +60,9 @@
 
       <!-- Menu Links MOBILE -->
       <div id="menuLinks" class="menu-contents" style="font-size: 20px; padding: 10px 20px;"></br>
-
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'tech_shelter' %}">All Techs</a></br></br>
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'devices' %}">Devices</a></br></br>
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'softwares' %}">Softwares</a></br></br>
       </div>
 
       <script>
@@ -84,7 +86,9 @@
       
       <!-- Menu Links DESKTOP -->
       <div class="menubar_div-content">
-
+        <a class="menu_link" style="float: left; padding-left: 26px;" href="{% url 'tech_shelter' %}">All Techs</a>
+        <a class="menu_link" style="float: left;" href="{% url 'devices' %}">Devices</a>
+        <a class="menu_link" style="float: left;" href="{% url 'softwares' %}">softwares</a>
       </div>
 
       <div class="user_div">
@@ -103,7 +107,9 @@
           <div id='desktop-userbuttons' class="menubar_div-content">
             {% if request.user.is_authenticated %}
               {% if user.is_superuser %}<a class="menu_link" style="float: right;" href="{% url 'users' %}"><i class="fa fa-fw fa-user"></i>Users
-                </a>{% endif %}
+                </a>
+                <a class="menu_link" href="{% url 'manage_techs' %}">Manage Techs</a>
+                {% endif %}
             {% else %}
             <a class="menu_link" style="float: right;" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Log in
             </a>

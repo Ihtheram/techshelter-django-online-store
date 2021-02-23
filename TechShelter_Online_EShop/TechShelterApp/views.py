@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 
-from .models import User
+from .models import User, Tech
 
 from TechShelterApp.models import User
 # from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.forms import AuthenticationForm
-from .forms import CustomUserCreationForm, UserUpdateForm, Admin_UserUpdateForm
+from .forms import CustomUserCreationForm, UserUpdateForm, Admin_UserUpdateForm, TechForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -14,7 +14,6 @@ from django.http import HttpResponse, Http404
 
 from django.contrib.auth import get_user_model
 from django.contrib import messages
-User = get_user_model()
 
 def tech_shelter(request):
 
@@ -26,14 +25,145 @@ def tech_shelter(request):
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
-       
-    context = {'logged_in_user':logged_in_user}
+    techs = Tech.objects.all()
+    context = {'logged_in_user':logged_in_user, 'techs':techs}
     return render(request, 'TechShelterApp/tech_shelter.html',context)
 
+def devices(request):
 
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    techs = Tech.objects.filter(digital=False)
+    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    return render(request, 'TechShelterApp/tech_shelter.html',context)
+
+def softwares(request):
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    techs = Tech.objects.filter(digital=True)
+    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    return render(request, 'TechShelterApp/tech_shelter.html',context)
+
+def tech_detail(request, techID):
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    try:
+        this_tech = Tech.objects.get(id=techID)
+    except Tech.DoesNotExist:
+        raise Http404("Tech does not exist")
+
+    context = {'logged_in_user':logged_in_user, 'this_tech': this_tech}
+    return render(request, 'TechShelterApp/tech_detail.html',context)
+
+
+def manageTechs(request):
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    techs = Tech.objects.all()
+    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    return render(request, 'TechShelterApp/managetechs.html',context)
+
+
+def addTech(request):
+
+    form = TechForm()
+    
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+
+    if request.method == 'POST':
+        form = TechForm(request.POST, request.FILES)     
+
+        if form.is_valid():
+            newTech = form.save(commit=False)
+            newTech.seller = request.user
+            newTech.save()
+        return redirect('manage_techs')  
+
+    techs = Tech.objects.all()
+    context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
+
+    return render(request, 'TechShelterApp/addtech.html',context)
+
+def updateTech(request, techID):
+    form = TechForm()
+    this_tech = Tech.objects.get(id=techID)
+    form = TechForm(instance=this_tech)
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+
+    if request.method == 'POST':
+        form = TechForm(request.POST, request.FILES, instance=this_tech)
+        if form.is_valid():
+            form.save()
+    
+    if request.method == 'FILES':
+        #to see what info are input, in console, uncomment the line below
+        #print('Printing POST:', request.POST)
+        form = TechForm(request.FILES, instance=this_tech)
+        if form.is_valid():
+            form.update()
+            
+    context = {'form':form, 'logged_in_user':logged_in_user, 'this_tech': this_tech}
+    return render(request, 'TechShelterApp/updatetech.html',context)
+
+
+def deleteTech(request, techID):
+
+    try:
+        this_tech = Tech.objects.get(id=techID)
+    except Tech.DoesNotExist:
+        raise Http404("Tech does not exist")
+
+    if request.method == 'POST':
+        this_tech.delete()
+        return redirect('manage_techs')
+    
+    context = {'this_tech': this_tech}
+    return render(request, 'TechShelterApp/deletetech.html',context)
 
 def signup(request):
-
+    
     if request.user.is_authenticated:
         logged_in_user=request.user
     else:
@@ -47,8 +177,9 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "Sign up successful")  
-            return render(request, 'TechShelterApp/tech_shelter.html', {'logged_in_user':logged_in_user})
+            messages.success(request, "Sign up successful")
+            techs = Tech.objects.all()  
+            return render(request, 'TechShelterApp/tech_shelter.html', {'logged_in_user':logged_in_user, 'techs':techs})
         else:
             messages.error(request, "Please use valid Username and Password!")  
     
