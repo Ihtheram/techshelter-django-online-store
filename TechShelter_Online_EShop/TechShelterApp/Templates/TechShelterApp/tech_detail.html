@@ -15,8 +15,8 @@
 			{{this_tech.name}}</h1>
 	</br></br></br></br></br></br>
 	<h2 style="background-color:rgba(255, 0, 0, 0); width:fit-content; float: left; text-align: left; color: rgb(167, 167, 167);">
-		Seller: <i style="color: rgb(0, 129, 204);">
-			{{this_tech.seller}} </h2> </i>
+		Seller: <a href="{% url 'user_tech_shelter' this_tech.seller.id %}" style="text-decoration: none;"><i style="color: rgb(0, 129, 204);">
+			{{this_tech.seller}} </h2> </i></a>
 		</br></br></br></br>
 	<h3 class="pricetag" style="float: left;">৳{{this_tech.price}}</h3>
 </br></br></br></br>

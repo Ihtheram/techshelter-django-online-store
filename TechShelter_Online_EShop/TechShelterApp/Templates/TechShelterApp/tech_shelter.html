@@ -12,13 +12,13 @@
 
        
         {% for tech in techs %}
-        <div class="itemscol" style="margin: 0px; overflow: visible;">
+        <div class="itemscol" style="margin: 0px; overflow: visible; padding: 10px;">
        
        
-            <a href="{% url 'tech_detail' tech.id %}">
+            
 
                 <!-- IMAGE & NAME -->
-                <div style="height: 100px; width: 100%; clear: both; position: relative; text-align: left;">
+                <div style="height: 100px; width: 100%; clear: both; position: relative; text-align: left;"> 
                     <img src="{{tech.pictureURL}}" style="height: 100%; width:100% ;"></img>
                     <div style="position: absolute; bottom: 2px; left: 5px;">
                         <h3 style="float: left; font-size: 17px; padding-top: 0px; margin-top: 0px; margin-bottom: 5px; text-shadow: 0px 0px 1px black, 0px 0px 4px black, 0px 0px 6px black;">
@@ -29,15 +29,14 @@
 
                 <div style="height: fit-content; width: 100%; margin: 5px 0px; background-color: rgba(255, 136, 0, 0);clear: both;position: relative; overflow: hidden;">
                     <!-- SELLER NAME or USERNAME OF THE USER WHO ADDED THE TECH ITEM -->
-                    <div style="position: absolute; overflow: hidden; width:50%; height:fit-content; background-color: rgba(0, 255, 255, 0); clear: both;">
-                        <h5 style="background-color:rgba(255, 0, 0, 0); float: left; text-align: left; color: rgb(167, 167, 167); font-size:small;">
-                            by <i style="color: rgb(0, 96, 141);"> {{tech.seller}}</i></h5>
-                    </div>
+                    
                     <!-- HINT FOR SEEING DETAIL -->
                     <div style="position: relative; overflow: hidden; width:50%; height:fit-content; background-color:rgba(255, 255, 255, 0);clear: both; float: right;">
-                        <i class="hint">click for detail</i>
+                        <a href="{% url 'tech_detail' tech.id %}" style="padding: 0%;"><i class="hint">click for detail</i></a>
                     </div>
-
+                    <div style="position: absolute; overflow: hidden; width:50%; height:fit-content; background-color: rgba(0, 255, 255, 0); clear: both; padding-top: 5px;">
+                        <p style="float: left; text-align: left; color: rgb(167, 167, 167); font-size:small; margin: 0%; padding: 0%;padding-top: 2px; padding-right: 2px;">by </p><a href="{% url 'user_tech_shelter' tech.seller.id %}" style="text-decoration: none;color: rgb(0, 96, 141);margin: 0%; padding: 0%;float: left;">{{tech.seller}}</a>
+                    </div>
                     <div style="position: relative;background-color: rgba(0, 255, 255, 0); width: 100%; height:fit-content; float: left; margin-top: 20px;">
                         <!-- BUTTON TO ADD ITEM TO CART -->
                         <button data-tech={{tech.id}} data-action="add" class="pluscart update-cart">
@@ -49,7 +48,7 @@
                 </div>
 
 
-            </a>
+            
 
 
         </div>

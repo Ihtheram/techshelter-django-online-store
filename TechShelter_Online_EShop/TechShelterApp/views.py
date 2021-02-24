@@ -75,6 +75,37 @@ def tech_detail(request, techID):
     context = {'logged_in_user':logged_in_user, 'this_tech': this_tech}
     return render(request, 'TechShelterApp/tech_detail.html',context)
 
+def my_tech_shelter(request):
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+        user = request.user 
+    else:
+        user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    techs = Tech.objects.filter(seller=user)
+    context = {'logged_in_user':logged_in_user, 'user':user, 'techs':techs}
+    return render(request, 'TechShelterApp/tech_shelter_stall.html',context)
+
+def user_tech_shelter(request, userID):
+    user = User.objects.get(id=userID)  
+    techs = Tech.objects.filter(seller=user)
+    
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    
+    context = {'logged_in_user':logged_in_user, 'user':user, 'techs':techs}
+    return render(request, 'TechShelterApp/tech_shelter_stall.html',context)
+
 
 def manageTechs(request):
 
@@ -90,6 +121,19 @@ def manageTechs(request):
     context = {'logged_in_user':logged_in_user, 'techs':techs}
     return render(request, 'TechShelterApp/managetechs.html',context)
 
+def manageMyTechs(request):
+
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+    techs = Tech.objects.filter(seller=logged_in_user)
+    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    return render(request, 'TechShelterApp/managetechs.html',context)
 
 def addTech(request):
 
@@ -111,7 +155,13 @@ def addTech(request):
             newTech = form.save(commit=False)
             newTech.seller = request.user
             newTech.save()
-        return redirect('manage_techs')  
+        if 'Seller' in logged_in_user.usertype:
+            techs = Tech.objects.filter(seller=logged_in_user)
+        elif logged_in_user.is_admin or logged_in_user.is_staff:
+            techs = Tech.objects.all()
+        context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
+        return render(request, 'TechShelterApp/managetechs.html',context)
+
 
     techs = Tech.objects.all()
     context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
@@ -136,6 +186,12 @@ def updateTech(request, techID):
         form = TechForm(request.POST, request.FILES, instance=this_tech)
         if form.is_valid():
             form.save()
+        if 'Seller' in logged_in_user.usertype:
+            techs = Tech.objects.filter(seller=logged_in_user)
+        elif logged_in_user.is_admin or logged_in_user.is_staff:
+            techs = Tech.objects.all()
+        context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
+        return render(request, 'TechShelterApp/managetechs.html',context)
     
     if request.method == 'FILES':
         #to see what info are input, in console, uncomment the line below
@@ -150,6 +206,15 @@ def updateTech(request, techID):
 
 def deleteTech(request, techID):
 
+    if request.user.is_authenticated:
+        logged_in_user = request.user        
+    else:
+        logged_in_user = {
+			'username':'guest',
+			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
+			'email':'null'
+        }
+
     try:
         this_tech = Tech.objects.get(id=techID)
     except Tech.DoesNotExist:
@@ -157,7 +222,12 @@ def deleteTech(request, techID):
 
     if request.method == 'POST':
         this_tech.delete()
-        return redirect('manage_techs')
+        if 'Seller' in logged_in_user.usertype:
+            techs = Tech.objects.filter(seller=logged_in_user)
+        elif logged_in_user.is_admin or logged_in_user.is_staff:
+            techs = Tech.objects.all()
+        context = {'logged_in_user':logged_in_user, 'techs':techs}
+        return render(request, 'TechShelterApp/managetechs.html',context)
     
     context = {'this_tech': this_tech}
     return render(request, 'TechShelterApp/deletetech.html',context)

@@ -9,7 +9,10 @@ urlpatterns = [
     path('softwares', views.softwares, name='softwares'),
     path('tech_detail/<int:techID>', views.tech_detail, name='tech_detail'),
     
+    path('my_tech_shelter', views.my_tech_shelter, name='my_tech_shelter'),
+    path('user_tech_shelter/<int:userID>', views.user_tech_shelter, name='user_tech_shelter'),
     path('manage_techs/', views.manageTechs, name="manage_techs"),
+    path('manage_my_techs/', views.manageMyTechs, name="manage_my_techs"),
     path('add_tech/', views.addTech, name="add_tech"),    
     path('<int:techID>/update_tech/', views.updateTech, name="update_tech"),
     path('<int:techID>/delete_tech/', views.deleteTech, name="delete_tech"),
