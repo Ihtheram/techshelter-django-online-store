@@ -1,0 +1,96 @@
+{% extends 'TechShelterApp/main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<h1 style="padding-left:10px; padding-bottom: 15px; color:rgba(255, 255, 255, 0.26)">CHECKOUT</h1>
+<div class="row"  style="margin: 0px 0px;">
+
+     <div class="col-lg-6">
+		<div class="box-element"  style="color:white; background-color:rgba(0, 0, 0, 0); background-image: linear-gradient(to right, #fc5a5a1e, rgba(255, 230, 0, 0.096) ); box-shadow: 0px 3px 5px black;" >
+               <a  class="btn btn-outline-dark" href="{% url 'cart' %}"  style="color:rgb(254, 254, 255); background-color: rgba(0, 162, 255, 0.671); box-shadow: 2px 2px 2px black;">&#x2190; Back to Cart</a>
+			<hr>
+			<h3>Order Outline</h3>
+               <hr>
+               {% for orderedtech in orderedtechs %}
+			<div class="cart-row">
+				<div style="flex:1"><img class="row-image" src="{{orderedtech.tech.pictureURL}}"></div>
+				<div style="flex:2"><p>{{orderedtech.tech.techname}}</p></div>
+				<div style="flex:1"><p>৳{{orderedtech.tech.price|floatformat:2}}</p></div>
+				<div style="flex:1"><p>x{{orderedtech.quantity}}</p></div>
+               </div>
+               {% endfor %}
+			<h5>Items:   {{orderinfo.get_cart_item_quantity}}</h5>
+			<h5>Total:   ৳{{orderinfo.get_cart_total_price}}</h5>
+		</div>
+     </div>
+     
+	<div class="col-lg-6" >
+		<div class="box-element" id="form-wrapper"  style="color:white; background-color:rgba(0, 0, 0, 0); background-image: linear-gradient(to right, #fc5a5a1e, rgba(255, 230, 0, 0.096) ); box-shadow: 0px 3px 5px black;">
+               
+               <form method="post">
+                    
+                    {% csrf_token %}
+                    {% if orderinfo.shipping %}
+                    <table>
+                         {% for field in form.visible_fields %}
+                            <tr style="height: 80px;">
+                              <th style="width: 5%; sans-serif;; padding-bottom: 3%">{{ field.label_tag }}</th>
+                              <td style="width: 80%; padding: 10px;">
+                                 
+                                 {% render_field field style="color:white ; background-color:rgba(0, 0, 0, 0.281); border-radius: 5px; border: 2px dashed transparent; width:100%" placeholder=field.name %}<br><br>
+                                 
+                              </td>
+                            </tr>
+                         {% endfor %}
+                       </table>
+                    {% endif %}
+                    <button id="make-payment" class="pay" type="submit" style="margin-top: 20px;margin-bottom: 0px;">Confirm Order</button>
+                    
+                  </form>
+               
+		</div>
+          
+          <br>
+
+	</div>
+
+	
+</div>
+<script type="text/javascript">
+     var shipping = '{{orderinfo.shipping}}'
+     var total = '{{orderinfo.get_cart_total_price}}'
+
+     //Hide entire form if user is not logged in and shipping is false
+     if (shipping == 'False') {
+          document.getElementById('shipping-info').innerHTML = ''
+     }
+
+     //Hide name and email form for logged in user
+     if (user != 'AnonymousUser') {
+          document.getElementById('user-info').innerHTML = ''
+     }
+
+     // Hide customer's shipping information form for Virtual orderedtech and shows payment form
+     if (shipping == 'False' && user != 'AnonymousUser') {
+          //Hide entire form if user is logged in and shipping is false
+          document.getElementById('form-wrapper').classList.add("hidden");
+          //Show payment if logged in user wants to buy an orderedtech that does not require shipping
+          document.getElementById('payment-info').classList.remove("hidden");
+     }
+
+     var form = document.getElementById('form')
+     form.addEventListener('submit', function (e){
+          e.preventDefault()
+          console.log('Form submitted...')
+          document.getElementById('form-button').classList.add('hidden') // add class 'hidden' to Confirm Information button to hide the button
+          document.getElementById('payment-info').classList.remove('hidden') // remove class 'hidden' to unhide payment information
+     })
+
+     document.getElementById('make-payment').addEventListener('click', function (e) {
+          submitFormData(form, "{% url 'tech_shelter' %}")
+     })
+</script>
+
+{% endblock content %}

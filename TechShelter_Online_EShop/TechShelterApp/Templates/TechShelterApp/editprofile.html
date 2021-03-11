@@ -1,0 +1,79 @@
+{% extends 'TechShelterApp/main.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% block content %}
+
+<h1 class="pagename">USER PROFILE</h1>
+
+
+
+			
+		
+		<form method="POST" enctype="multipart/form-data" novalidate style="padding: 15px; margin-top: 40px; color: rgb(185, 185, 185);">
+			
+			<img src="{{user.imageURL}}" style="width:200px;height:200px; border-radius: 50%; float: left;position:sticky;"></img>
+			<h1 style="float: left; margin-top:0px; padding-left:50px; color:rgb(255, 255, 255); text-shadow: 0px 0px 2px rgb(247, 247, 247), 0px 0px 4px rgb(255, 255, 255), 0px 0px 8px rgba(255, 255, 255, 0.685), 0px 0px 30px rgba(255, 255, 255, 0.548);">
+		{{user.username}}</h1>
+	</br><h3 style="padding-top: 13px;padding-left: 250px;">{{user.get_full_name}}</h3>
+	<h4 style="padding-top: 7px;padding-left: 250px;">
+	{% if user.is_superuser %}Administrator
+    {% elif not user.is_superuser and user.is_staff %}Manager
+    {% else %}{{user.usertype}}
+    {% endif %}</h4>
+	<h5 style="padding-top: 13px;padding-left: 250px;">Date Joined: {{user.date_joined}}</h5>
+	<h5 style="padding-top: 0px;padding-left: 250px;">Email: {{user.email}}</h5>
+	<h5 style="padding-top: 0px;padding-left: 250px;">Location: {{user.location}}</h5>
+	<br><br><br>
+			{% csrf_token %}
+			
+			{{ form.non_field_errors }}
+
+			{% for hidden_field in form.hidden_fields %}
+			  {{ hidden_field.errors }}
+			  {{ hidden_field }}
+			{% endfor %}
+		  
+			<table>
+			  {% for field in form.visible_fields %}
+				<tr style="height: 80px;">
+				  <th style="width: 5%; sans-serif;; padding-bottom: 3%">{{ field.label_tag }}</th>
+				  <td style="width: 80%; padding: 10px;">
+					
+					{% render_field field style="color:white ; background-color:rgba(0, 0, 0, 0.281); border-radius: 5px; border: 2px dashed transparent; width:100%" placeholder=field.name %}<br>
+					
+				  </td>
+				</tr>
+			  {% endfor %}
+			</table>
+				
+			<a href="{% url 'password_reset' %}" class="btn btn-link">Change Password</a>
+
+		</br></br></br></br>
+			<input class="pluscart" type="submit" name="submit" value="Save Changes" style="margin: 30px 0px; width: fit-content;">
+			
+			<!-- DELETE BUTTON -->
+			{% if logged_in_user.is_superuser %}
+			<a class="deletebtn" href="{% url 'deleteprofile' user.id %}">
+
+				<i class="glyphicon glyphicon-trash" style="font-size: 20px; width: fit-content;"></i>
+				Delete Account
+
+			</a>
+			{% endif %}
+			<a class="deletebtn" href="{% url 'deactivateprofile' user.id %}">
+
+				<i class="glyphicon glyphicon-trash" style="font-size: 20px; width: fit-content;"></i>
+				Deactivate Account
+
+			</a>
+
+    </h4>
+
+			
+		</form>
+
+
+
+
+
+{% endblock content %}
