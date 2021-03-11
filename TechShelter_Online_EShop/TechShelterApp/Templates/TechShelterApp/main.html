@@ -25,25 +25,25 @@
 
   <!-- JS for ADDING TO CART -->
   <script type="text/javascript">
-    var user = '{{tech_shelter.user}}'
+    var user = '{{request.user}}'
 
-    function getCsrfToken(username) {
+    function getCsrfToken(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
           const cookie = cookies[i].trim();
-          // Does this cookie string begin with the username we want?
-          if (cookie.substring(0, username.length + 1) === (username + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(username.length + 1));
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
             break;
           }
         }
       }
       return cookieValue;
     }
-    const csrftoken = getCsrfToken('csrftoken');
-  </script>
+    var csrftoken = getCsrfToken('csrftoken');
+</script>
 
 </head>
 
@@ -55,14 +55,18 @@
     <div class="logo_div">
       <i id="menuicon" class="fa fa-bars menuicon" style="cursor: pointer;" onclick="menuFunction()"></i>
       <a class="storelink" href="{% url 'tech_shelter' %}">
-        <h1 class="logotext"> TECHSHELTER <span style="padding-bottom: 5px; font-family: 'Jura'; font-size: 14px;"> O n l i n e &nbsp; T e c h s t o r e </span></h1>
+        <h1 class="logotext"> TECHSHELTER <span style="padding-bottom: 5px; font-family: 'Jura'; font-size: 14px;"> O n
+            l i n e &nbsp; T e c h s t o r e </span></h1>
       </a>
 
       <!-- Menu Links MOBILE -->
       <div id="menuLinks" class="menu-contents" style="font-size: 20px; padding: 10px 20px;"></br>
-        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'tech_shelter' %}">All Techs</a></br></br>
-        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'devices' %}">Devices</a></br></br>
-        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;" href="{% url 'softwares' %}">Softwares</a></br></br>
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;"
+          href="{% url 'tech_shelter' %}">All Techs</a></br></br>
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;"
+          href="{% url 'devices' %}">Devices</a></br></br>
+        <a class="menu_link" style="float: left; padding: 10px 20px; background-color: transparent;"
+          href="{% url 'softwares' %}">Softwares</a></br></br>
       </div>
 
       <script>
@@ -83,7 +87,7 @@
     </div> <!-- LOGO DIV ENDS -->
 
     <div style="width: 100%; background-color: rgba(255, 255, 255, 0.048); z-index: 3;height: 75px;">
-      
+
       <!-- Menu Links DESKTOP -->
       <div class="menubar_div-content">
         <a class="menu_link" style="float: left; padding-left: 26px;" href="{% url 'tech_shelter' %}">All Techs</a>
@@ -99,25 +103,40 @@
           <img onclick="usermenuFunction()" class="user" src="{{logged_in_user.imageURL}}"
             style="float: right; width: 70px; border-radius: 100px; margin: 10px;"></img>
 
-
-
-
+          <!-- CART DESKTOP -->
+          
+          <a class="cart" style="float: right; text-decoration: none; margin:20px; font-size: 40px;"
+            href="{% url 'cart' %}">
+            <p id="cart-total">
+              {{orderinfo.get_cart_item_quantity}}
+              <span class="glyphicon glyphicon-shopping-cart" style="font-size: 20px;">
+              </span>
+            </p>  
+          </a>
+          {% if orderinfo.get_cart_item_quantity is not 0 %}
+          {% endif %}
 
           <!-- Desktop login and signup buttons -->
           <div id='desktop-userbuttons' class="menubar_div-content">
             {% if request.user.is_authenticated %}
-              {% if logged_in_user.is_superuser %}<a class="menu_link" style="float: right;" href="{% url 'users' %}"><i class="fa fa-fw fa-user"></i>All Users
-                </a>
-                <a class="menu_link" href="{% url 'manage_techs' %}">Manage All Techs</a>             
-                {% endif %}
-                {% if 'Seller' in logged_in_user.usertype or logged_in_user.is_superuser %}
+              {% if logged_in_user.is_superuser %}
+                <a class="menu_link" href="{% url 'users' %}"><i class="fa fa-fw fa-user"></i>Manage All Users</a>
+                <a class="menu_link" href="{% url 'manage_techs' %}">Manage All Techs</a>
+              {% endif %}
+
+              {% if 'Seller' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff%}
                 <a class="menu_link" href="{% url 'my_tech_shelter' %}">My Stall</a>
-                {% endif %}
+                <a class="menu_link" style="width: fit-content;" href="{% url 'orders_received' %}">Orders Received</a>
+              {% endif %}
+              {% if 'Customer' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff %}
+                <a class="menu_link" style="width: fit-content;" href="{% url 'orders' %}">Orders Made</a>
+              {% endif %}
+
+
+
             {% else %}
-            <a class="menu_link" style="float: right;" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Log in
-            </a>
-            <a class="menu_link" style="float: right;" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i>
-              Sign up</a>
+              <a class="menu_link" style="float: right;" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i>Log in</a>
+              <a class="menu_link" style="float: right;" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i>Sign up</a>
             {% endif %}
 
 
@@ -125,18 +144,17 @@
 
 
         </div>
-                 
+
         <script>
           /* When the user clicks on the button, 
           toggle between hiding and showing the dropdown content */
           function usermenuFunction() {
             document.getElementById("userDropdown").classList.toggle("show");
-            
+
             var b = document.getElementById("block-contents");
             if (userDropdown.classList.contains('show')) {
-                  b.style.filter = "blur(2px)";
-                }if(!userDropdown.classList.contains('show'))
-                {b.style.filter = "blur(0px)";}
+              b.style.filter = "blur(2px)";
+            } if (!userDropdown.classList.contains('show')) { b.style.filter = "blur(0px)"; }
           }
 
 
@@ -155,55 +173,57 @@
                   b.style.filter = "blur(0px)";
                 }
               }
-          }
-          if (!event.target.matches('.menuicon')) {
-          var x = document.getElementById("menuLinks");
-          var b = document.getElementById("block-contents");
-                if (x.style.display === "block") {
-                    x.style.display = "none";
-                    b.style.filter = "blur(0px)";
+            }
+            if (!event.target.matches('.menuicon')) {
+              var x = document.getElementById("menuLinks");
+              var b = document.getElementById("block-contents");
+              if (x.style.display === "block") {
+                x.style.display = "none";
+                b.style.filter = "blur(0px)";
               }
+            }
           }
-          }
-          
+
 
         </script>
       </div>
- <!-- User drop down menu -->
- <div id="userDropdown" class="usermenu-content">
-  <H1
-    style="margin: 0%; padding: 0%; font-size: 22px; color: white; text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
-    {{logged_in_user.username}}</H1>
-  {% if request.user.is_authenticated %}
-  <H1
-    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
-    {{logged_in_user.email}}</H1>
-  <H1
-    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
-    {% if logged_in_user.is_superuser %}Administrator
-    {% elif not logged_in_user.is_superuser and logged_in_user.is_staff %}Manager
-    {% else %}{{logged_in_user.usertype}}
-    {% endif %}</H1>
-  <hr>
-  
+      <!-- User drop down menu -->
+      <div id="userDropdown" class="usermenu-content">
+        <H1
+          style="margin: 0%; padding: 0%; font-size: 22px; color: white; text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+          {{logged_in_user.username}}</H1>
+        {% if request.user.is_authenticated %}
+        <H1
+          style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+          {{logged_in_user.email}}</H1>
+        <H1
+          style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+          {% if logged_in_user.is_superuser %}Administrator
+          {% elif not logged_in_user.is_superuser and logged_in_user.is_staff %}Manager
+          {% else %}{{logged_in_user.usertype}}
+          {% endif %}</H1>
+        <hr>
 
-  <div id="udiv3" style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
-    {% if request.user.is_authenticated %}<a class="uopt" href="{% url 'editprofile' user.id %}">Edit Profile</a>{% endif %}
-    {% if logged_in_user.is_superuser %}<a class="uopt" href="http://127.0.0.1:8000/admin/">Django administration</a>{% endif %}
-    <a class="logout" href="{% url 'logout' %}"><i class="fa">&#xf2f5;</i> Log out</a>
-  </div>
-  {% else %}
-  <H1
-    style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
-    Not logged in</H1>
-  <hr>
-  <div id='udiv2' style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
-    <a class="uopt" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i> Signup </a>
-    </br>
-    <a class="uopt" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Login </a>
-  </div>
-  {% endif %}
-</div>
+
+        <div id="udiv3" style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
+          {% if request.user.is_authenticated %}<a class="uopt" href="{% url 'editprofile' user.id %}">Edit
+            Profile</a>{% endif %}
+          {% if logged_in_user.is_superuser %}<a class="uopt" href="http://127.0.0.1:8000/admin/">Django
+            administration</a>{% endif %}
+          <a class="logout" href="{% url 'logout' %}"><i class="fa">&#xf2f5;</i> Log out</a>
+        </div>
+        {% else %}
+        <H1
+          style="padding: 0px 0px; font-size: 11px; color: white;  text-shadow: -2px 0px 5px white, 0px 0px 20px white;">
+          Not logged in</H1>
+        <hr>
+        <div id='udiv2' style="text-shadow: 0px 0px 30px rgb(250, 250, 250);">
+          <a class="uopt" href="{% url 'signup' %}"><i class="fa fa-pencil-square-o"></i> Signup </a>
+          </br>
+          <a class="uopt" href="{% url 'login' %}"><i class="fa fa-fw fa-user"></i> Login </a>
+        </div>
+        {% endif %}
+      </div>
 
     </div>
   </div>
@@ -219,11 +239,24 @@
   </div>
 
   <footer>
-    <small><p>
-        &copy; IRMTech.Inc  
+    <small>
+      <p>
+        &copy; IRMTech.Inc
       </p>
     </small>
-  <footer>
+    <footer>
+
+      <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 
 </body>
+
 </html>

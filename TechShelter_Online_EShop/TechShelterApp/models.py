@@ -45,3 +45,58 @@ class Tech(models.Model):
 		except:
 			url = 'static/media/placeholder.png'
 		return url
+
+#Each order given by a particular user(customer)
+class OrderInfo(models.Model):
+	customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+	date_ordered = models.DateTimeField(auto_now_add=True)
+	complete = models.BooleanField(default=False)
+	transaction_id = models.CharField(max_length=100, null=True)
+
+	def __str__(self):
+		return str(self.id)
+
+	@property
+	def shipping(self):#get if the item is digital or physical
+		shipping = False
+		orderedtechs = self.orderedtech_set.all() # reverse relation with OrderedTech (get all the OrderedTech objects belong to a single OrderInfo object)
+		for orderedtech in orderedtechs:
+			if orderedtech.tech.digital == False:
+				shipping = True
+		return shipping
+
+	@property
+	def get_cart_total_price(self):#get price total for items in cart
+		orderedtechs = self.orderedtech_set.all() # reverse relation with OrderedTech (get all the OrderedTech objects belong to a single OrderInfo object)
+		cart_total_price=sum([orderedtech.get_total_price for orderedtech in orderedtechs])
+		return cart_total_price
+
+	@property
+	def get_cart_item_quantity(self):#get number of items in cart
+		orderedtechs = self.orderedtech_set.all() # reverse relation with OrderedTech (get all the OrderedTech objects belong to a single OrderInfo object)
+		cart_item_quantity=sum([orderedtech.quantity for orderedtech in orderedtechs])
+		return cart_item_quantity
+
+#Each items in cart
+class OrderedTech(models.Model):
+	tech = models.ForeignKey(Tech, on_delete=models.SET_NULL, null=True)
+	order = models.ForeignKey(OrderInfo, on_delete=models.SET_NULL, null=True)
+	quantity = models.IntegerField(default=0, null=True, blank=True)
+	date_added = models.DateTimeField(auto_now_add=True)
+
+	@property
+	def get_total_price(self):
+		total_price=self.tech.price*self.quantity
+		return total_price
+	
+class DeliveryLocation(models.Model):
+	customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	order = models.ForeignKey(OrderInfo, on_delete=models.SET_NULL, null=True)
+	address = models.CharField(max_length=200, null=False)
+	city = models.CharField(max_length=200, null=False)
+	state = models.CharField(max_length=200, null=False)
+	zipcode = models.CharField(max_length=200, null=False)
+	date_added = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return self.address

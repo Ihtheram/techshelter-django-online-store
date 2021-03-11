@@ -11,6 +11,13 @@ urlpatterns = [
     
     path('my_tech_shelter', views.my_tech_shelter, name='my_tech_shelter'),
     path('user_tech_shelter/<int:userID>', views.user_tech_shelter, name='user_tech_shelter'),
+    path('orders/', views.orders, name="orders"),
+    path('ordersrcvd/', views.orders_received, name="orders_received"),
+    
+    path('cart/', views.cart, name="cart"),
+    path('update_item/', views.updateItem, name="update_item"),
+    path('checkout/', views.checkout, name="checkout"),
+    
     path('manage_techs/', views.manageTechs, name="manage_techs"),
     path('manage_my_techs/', views.manageMyTechs, name="manage_my_techs"),
     path('add_tech/', views.addTech, name="add_tech"),    
