@@ -124,11 +124,11 @@
                 <a class="menu_link" href="{% url 'manage_techs' %}">Manage All Techs</a>
               {% endif %}
 
-              {% if 'Seller' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff%}
+              {% if 'Seller' in logged_in_user.usertype and not logged_in_user.is_superuser and not logged_in_user.is_staff%}
                 <a class="menu_link" href="{% url 'my_tech_shelter' %}">My Stall</a>
                 <a class="menu_link" style="width: fit-content;" href="{% url 'orders_received' %}">Orders Received</a>
               {% endif %}
-              {% if 'Customer' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff %}
+              {% if 'Customer' in logged_in_user.usertype and not logged_in_user.is_superuser and not logged_in_user.is_staff %}
                 <a class="menu_link" style="width: fit-content;" href="{% url 'orders' %}">Orders Made</a>
               {% endif %}
 
@@ -210,6 +210,15 @@
             Profile</a>{% endif %}
           {% if logged_in_user.is_superuser %}<a class="uopt" href="http://127.0.0.1:8000/admin/">Django
             administration</a>{% endif %}
+          {% if 'Seller' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff%}
+            <a class="uopt" href="{% url 'my_tech_shelter' %}">My Stall</a>
+            <a class="uopt" href="{% url 'orders_received' %}">Orders Received</a>
+          {% endif %}
+          {% if 'Customer' in logged_in_user.usertype or logged_in_user.is_superuser or logged_in_user.is_staff %}
+            <a class="uopt" href="{% url 'orders' %}">Orders Made</a>
+          {% endif %}
+
+
           <a class="logout" href="{% url 'logout' %}"><i class="fa">&#xf2f5;</i> Log out</a>
         </div>
         {% else %}

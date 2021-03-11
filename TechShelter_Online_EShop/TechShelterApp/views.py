@@ -359,7 +359,7 @@ def deleteTech(request, techID):
         this_tech.delete()
         if 'Seller' in logged_in_user.usertype:
             techs = Tech.objects.filter(seller=logged_in_user)
-        elif logged_in_user.is_admin or logged_in_user.is_staff:
+        elif logged_in_user.is_superuser or logged_in_user.is_staff:
             techs = Tech.objects.all()
         context = {'logged_in_user':logged_in_user, 'techs':techs}
         return render(request, 'TechShelterApp/managetechs.html',context)

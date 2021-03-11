@@ -1,5 +1,6 @@
 {% extends 'TechShelterApp/main.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -32,7 +33,18 @@
                     
                     {% csrf_token %}
                     {% if orderinfo.shipping %}
-                    {{ form|crispy }}
+                    <table>
+                         {% for field in form.visible_fields %}
+                            <tr style="height: 80px;">
+                              <th style="width: 5%; sans-serif;; padding-bottom: 3%">{{ field.label_tag }}</th>
+                              <td style="width: 80%; padding: 10px;">
+                                 
+                                 {% render_field field style="color:white ; background-color:rgba(0, 0, 0, 0.281); border-radius: 5px; border: 2px dashed transparent; width:100%" placeholder=field.name %}<br><br>
+                                 
+                              </td>
+                            </tr>
+                         {% endfor %}
+                       </table>
                     {% endif %}
                     <button id="make-payment" class="pay" type="submit" style="margin-top: 20px;margin-bottom: 0px;">Confirm Order</button>
                     

@@ -38,6 +38,7 @@
 			<div class="cart-row">
 				<div style="flex:1"></div>
 				<div style="flex:3"><strong>Item</strong></div>
+				<div style="flex:1"><strong>Seller</strong></div>
 				<div style="flex:1"><strong>Price</strong></div>
 				<div style="flex:1"><strong>Quantity</strong></div>
 				<div style="flex:1"><strong>Total</strong></div>
@@ -51,6 +52,9 @@
 				<div style="flex:1"><img class="row-image" src="{{orderedtech.tech.pictureURL}}"></div>
 				<div style="flex:3">
 					<p>{{orderedtech.tech.techname}}</p>
+				</div>
+				<div style="flex:1">
+					<p>{{orderedtech.tech.seller}}</p>		
 				</div>
 				<div style="flex:1">
 					<p>৳{{orderedtech.tech.price|floatformat:2}}</p>

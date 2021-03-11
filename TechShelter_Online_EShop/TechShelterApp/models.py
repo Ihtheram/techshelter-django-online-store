@@ -27,7 +27,7 @@ class User(AbstractUser):
     	return url
 
 class Tech(models.Model):
-	seller = models.ForeignKey(User, on_delete=models.SET_NULL, editable=False, null=True, blank=True)
+	seller = models.ForeignKey(User, on_delete=models.CASCADE, editable=False, null=True, blank=True)
 	techname = models.CharField(max_length=200)
 	price = models.FloatField()
 
