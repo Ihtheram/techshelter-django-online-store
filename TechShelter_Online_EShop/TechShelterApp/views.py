@@ -39,47 +39,62 @@ def tech_shelter(request):
 def devices(request):
 
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
+
     techs = Tech.objects.filter(digital=False)
-    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    context = {'logged_in_user':logged_in_user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/tech_shelter.html',context)
 
 def softwares(request):
 
     if request.user.is_authenticated:
-        logged_in_user = request.user         
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
+
     techs = Tech.objects.filter(digital=True)
-    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    context = {'logged_in_user':logged_in_user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/tech_shelter.html',context)
 
 def tech_detail(request, techID):
 
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
+
     try:
         this_tech = Tech.objects.get(id=techID)
     except Tech.DoesNotExist:
         raise Http404("Tech does not exist")
 
-    context = {'logged_in_user':logged_in_user, 'this_tech': this_tech}
+    context = {'logged_in_user':logged_in_user, 'this_tech': this_tech, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/tech_detail.html',context)
 
 def orders(request):
@@ -228,32 +243,42 @@ def user_tech_shelter(request, userID):
     else:
         user = "Unknown"
         techs = []
-    
+
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
     
-    context = {'logged_in_user':logged_in_user, 'user':user, 'techs':techs}
+    context = {'logged_in_user':logged_in_user, 'user':user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/tech_shelter_stall.html',context)
 
 
 def manageTechs(request):
 
+
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
+    
     techs = Tech.objects.all()
-    context = {'logged_in_user':logged_in_user, 'techs':techs}
+    context = {'logged_in_user':logged_in_user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/managetechs.html',context)
 
 def manageMyTechs(request):
@@ -275,13 +300,17 @@ def addTech(request):
     form = TechForm()
     
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
 
     if request.method == 'POST':
         form = TechForm(request.POST, request.FILES)     
@@ -289,12 +318,13 @@ def addTech(request):
         if form.is_valid():
             newTech = form.save(commit=False)
             newTech.seller = request.user
-            newTech.save()
+            form.save()
+            
         if 'Seller' in logged_in_user.usertype:
             techs = Tech.objects.filter(seller=logged_in_user)
-        elif logged_in_user.is_admin or logged_in_user.is_staff:
+        elif logged_in_user.is_superuser or logged_in_user.is_staff:
             techs = Tech.objects.all()
-        context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
+        context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
         return render(request, 'TechShelterApp/managetechs.html',context)
 
 
@@ -309,13 +339,17 @@ def updateTech(request, techID):
     form = TechForm(instance=this_tech)
 
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
 
     if request.method == 'POST':
         form = TechForm(request.POST, request.FILES, instance=this_tech)
@@ -323,7 +357,7 @@ def updateTech(request, techID):
             form.save()
         if 'Seller' in logged_in_user.usertype:
             techs = Tech.objects.filter(seller=logged_in_user)
-        elif logged_in_user.is_admin or logged_in_user.is_staff:
+        elif logged_in_user.is_superuser or logged_in_user.is_staff:
             techs = Tech.objects.all()
         context = {'form':form, 'logged_in_user':logged_in_user, 'techs':techs}
         return render(request, 'TechShelterApp/managetechs.html',context)
@@ -335,20 +369,24 @@ def updateTech(request, techID):
         if form.is_valid():
             form.update()
             
-    context = {'form':form, 'logged_in_user':logged_in_user, 'this_tech': this_tech}
+    context = {'form':form, 'logged_in_user':logged_in_user, 'this_tech': this_tech, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/updatetech.html',context)
 
 
 def deleteTech(request, techID):
 
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
 
     try:
         this_tech = Tech.objects.get(id=techID)
@@ -361,7 +399,8 @@ def deleteTech(request, techID):
             techs = Tech.objects.filter(seller=logged_in_user)
         elif logged_in_user.is_superuser or logged_in_user.is_staff:
             techs = Tech.objects.all()
-        context = {'logged_in_user':logged_in_user, 'techs':techs}
+        
+        context = {'logged_in_user':logged_in_user, 'techs':techs, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
         return render(request, 'TechShelterApp/managetechs.html',context)
     
     context = {'this_tech': this_tech}
@@ -398,32 +437,41 @@ def logout(request):
 
 def users(request):
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
+
     if request.user.is_superuser:
         users = User.objects.all()       
     else:
         users = {}
        
-    context = {'logged_in_user':logged_in_user, 'users':users}
+    context = {'logged_in_user':logged_in_user, 'users':users, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/users.html',context)
 
 
 
 def editprofile(request, userID):
     if request.user.is_authenticated:
-        logged_in_user = request.user        
+        logged_in_user = request.user
+        orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+        orderedtechs = orderinfo.orderedtech_set.all()       
     else:
         logged_in_user = {
 			'username':'guest',
 			'imageURL':'https://ssl.gstatic.com/images/branding/product/2x/avatar_square_grey_512dp.png',
 			'email':'null'
         }
+        orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
+        orderedtechs = []
     if request.user.is_superuser:
         form = Admin_UserUpdateForm()
         users = User.objects.all() 
@@ -469,7 +517,7 @@ def editprofile(request, userID):
             if form.is_valid():
                 form.update()
     
-    context = {'logged_in_user':logged_in_user, 'form':form, 'user':user}
+    context = {'logged_in_user':logged_in_user, 'form':form, 'user':user, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
     return render(request, 'TechShelterApp/editprofile.html',context)
 
 def deactivateprofile(request, userID):

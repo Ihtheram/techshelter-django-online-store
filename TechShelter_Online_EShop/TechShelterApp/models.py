@@ -1,7 +1,8 @@
 from django.db import models
 
 from django.contrib.auth.models import AbstractUser
-
+from graphviz import Digraph
+import pydotplus
 
 # A seller or customer
 class User(AbstractUser):

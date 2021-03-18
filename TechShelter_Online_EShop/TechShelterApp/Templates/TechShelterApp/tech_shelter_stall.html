@@ -4,8 +4,11 @@
 
 <div class="item_div">
 
-
+    {% if logged_in_user is user %}
+    <h1 class="pagename">My TECHSHELTER STALL</h1>
+    {% else %}
     <h1 class="pagename">TECHSHELTER STALL</h1>
+    {% endif %}
     <div style="padding: 15px; margin-top: 40px; color: rgb(185, 185, 185);">
     <img src="{{user.imageURL}}"
         style="width:200px;height:200px; border-radius: 50%; float: left;position:sticky;"></img>

@@ -19,9 +19,9 @@
     href="https://fonts.googleapis.com/css?family=Audiowide|Faster+One|Hanalei+Fill|Iceland|Josefin+Sans|Play|Racing+Sans+One|Wallpoet|Frosw|Righteous|Jura&display=swap">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
   <!-- JS for ADDING TO CART -->
   <script type="text/javascript">
@@ -104,7 +104,8 @@
             style="float: right; width: 70px; border-radius: 100px; margin: 10px;"></img>
 
           <!-- CART DESKTOP -->
-          
+          {% if orderinfo.get_cart_item_quantity is not 0 %}
+          {% if not logged_in_user.usertype == 'Seller' or logged_in_user.is_staff or logged_in_user.is_admin %}
           <a class="cart" style="float: right; text-decoration: none; margin:20px; font-size: 40px;"
             href="{% url 'cart' %}">
             <p id="cart-total">
@@ -113,7 +114,7 @@
               </span>
             </p>  
           </a>
-          {% if orderinfo.get_cart_item_quantity is not 0 %}
+          {% endif %}
           {% endif %}
 
           <!-- Desktop login and signup buttons -->
@@ -121,8 +122,11 @@
             {% if request.user.is_authenticated %}
               {% if logged_in_user.is_superuser %}
                 <a class="menu_link" href="{% url 'users' %}"><i class="fa fa-fw fa-user"></i>Manage All Users</a>
+                {% endif %}
+                {% if logged_in_user.is_superuser or logged_in_user.is_staff %}
                 <a class="menu_link" href="{% url 'manage_techs' %}">Manage All Techs</a>
-              {% endif %}
+                {% endif %}
+              
 
               {% if 'Seller' in logged_in_user.usertype and not logged_in_user.is_superuser and not logged_in_user.is_staff%}
                 <a class="menu_link" href="{% url 'my_tech_shelter' %}">My Stall</a>
