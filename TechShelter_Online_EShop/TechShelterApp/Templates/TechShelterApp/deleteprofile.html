@@ -1,7 +1,7 @@
 {% extends 'TechShelterApp/actionpage.html' %}
 {% load static %}
 {% block content %}
-<h1  class="pagename" style="text-align: center;">SURE TO DELETE "{{this_tech.techname}}"?</h1>
+<h1  class="pagename" style="text-align: center;">SURE TO DELETE "{{user.username}}"?</h1>
 
   <form action="{% url 'delete_tech' this_tech.id %}" method="POST">
     {% csrf_token %}

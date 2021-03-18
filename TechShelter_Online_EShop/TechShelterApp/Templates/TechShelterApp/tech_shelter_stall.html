@@ -4,10 +4,10 @@
 
 <div class="item_div">
 
-    {% if logged_in_user is user %}
-    <h1 class="pagename">My TECHSHELTER STALL</h1>
+    {% if logged_in_user == user %}
+    <h1 class="pagename">MY TECHSHELTER STALL</h1>
     {% else %}
-    <h1 class="pagename">TECHSHELTER STALL</h1>
+    <h1 class="pagename" style="text-transform: uppercase;">{{user.username}}'s TECHSHELTER STALL</h1>
     {% endif %}
     <div style="padding: 15px; margin-top: 40px; color: rgb(185, 185, 185);">
     <img src="{{user.imageURL}}"
@@ -27,7 +27,7 @@
     <h5 style="padding-top: 0px;padding-left: 250px;">Email: {{user.email}}</h5>
     <h5 style="padding-top: 0px;padding-left: 250px;">Location: {{user.location}}</h5>
     
-    {% if logged_in_user is user %}
+    {% if logged_in_user == user %}
     <br>
     <a class="menu_link" href="{% url 'editprofile' logged_in_user.id %}" style="margin: 30px;margin-top: 30px; margin-left: 35px;">Edit My Profile</a>
     <a class="menu_link" href="{% url 'manage_my_techs' %}" style="margin: 30px; margin-left: 55px;">Manage My Techs</a>
