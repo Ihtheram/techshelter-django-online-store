@@ -5,7 +5,7 @@
 
 
 <h1 class="pagename">ORDERS RECEIVED</h1>
-
+{% if rcv_ord_quantity is not 0 %}
 <div class="row" style="margin: 0px 12px; background-image: linear-gradient(to right, #fc5a5a1e, rgba(255, 230, 0, 0.096) ); box-shadow: 0px 3px 5px black;">
 	<div class="col-lg-12" style="padding: 0px 0px;">
 
@@ -45,5 +45,8 @@
 
 	</div>
 </div>
+{% else %}
+<h3 style="text-align: center; color: rgba(255, 255, 255, 0.507)">None of your items seems to be ordered by anyone yet!</h1>
+{% endif %}
 
 {% endblock content %}

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'TechShelterApp.apps.TechshelterappConfig',
     'crispy_forms',
     'widget_tweaks',
+    'django_extensions',
 
     'django.contrib.admin',
     'django.contrib.auth',
