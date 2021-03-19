@@ -126,6 +126,12 @@ def orders_received(request):
         items = orderinfo.orderedtech_set.all()
         orderedtechs = OrderedTech.objects.all()
 
+        rcv_ord_quantity = 0
+        for orderedtech in orderedtechs:
+            if orderedtech.order.complete and orderedtech.tech.seller.username == logged_in_user.username:
+                rcv_ord_quantity+=1
+
+
     else:
         logged_in_user = {
 			'name':'guest',
@@ -135,8 +141,11 @@ def orders_received(request):
         orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
         items = []
         orderedtechs = []
+        rcv_ord_quantity = 0
     
-    context = {'logged_in_user':logged_in_user, 'items':items, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
+
+
+    context = {'logged_in_user':logged_in_user, 'items':items, 'orderedtechs':orderedtechs,'orderinfo':orderinfo, 'rcv_ord_quantity':rcv_ord_quantity}
     return render(request, 'TechShelterApp/orders_rcv.html',context)
 
 def cart(request):

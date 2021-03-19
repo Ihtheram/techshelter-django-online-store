@@ -20,6 +20,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet" type='text/css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src='https://kit.fontawesome.com/a076d05399.js'></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
@@ -104,9 +105,9 @@
             style="float: right; width: 70px; border-radius: 100px; margin: 10px;"></img>
 
           <!-- CART DESKTOP -->
-          {% if orderinfo.get_cart_item_quantity is not 0 %}
+          {% if orderinfo.get_cart_item_quantity is not 0 and request.user.is_authenticated %}
           {% if not logged_in_user.usertype == 'Seller' or logged_in_user.is_staff or logged_in_user.is_admin %}
-          <a class="cart" style="float: right; text-decoration: none; margin:20px; font-size: 40px;"
+          <a class="cart" style="float: right; text-decoration: none; margin:5px; margin-top:10px; font-size: 40px;"
             href="{% url 'cart' %}">
             <p id="cart-total">
               {{orderinfo.get_cart_item_quantity}}
@@ -115,6 +116,15 @@
             </p>  
           </a>
           {% endif %}
+          {% elif not request.user.is_authenticated %}
+          
+          {% elif not logged_in_user.usertype == 'Seller' or logged_in_user.is_staff or logged_in_user.is_admin %}
+          <a class="cart" style="float: right; text-decoration: none; margin:5px; font-size: 40px;"
+            href="{% url 'cart' %}">
+                <span class="glyphicon glyphicon-shopping-cart" style="font-size: 20px;">
+              </span>
+              
+          </a>
           {% endif %}
 
           <!-- Desktop login and signup buttons -->
@@ -132,9 +142,11 @@
                 <a class="menu_link" href="{% url 'my_tech_shelter' %}">My Stall</a>
                 <a class="menu_link" style="width: fit-content;" href="{% url 'orders_received' %}">Orders Received</a>
               {% endif %}
+              {% if orderinfo.get_ordered_item_quantity is not 0 %}{% endif %}
               {% if 'Customer' in logged_in_user.usertype and not logged_in_user.is_superuser and not logged_in_user.is_staff %}
                 <a class="menu_link" style="width: fit-content;" href="{% url 'orders' %}">Orders Made</a>
               {% endif %}
+              
 
 
 
@@ -223,7 +235,7 @@
           {% endif %}
 
 
-          <a class="logout" href="{% url 'logout' %}"><i class="fa">&#xf2f5;</i> Log out</a>
+          <a class="uopt" href="{% url 'logout' %}"><i class="fa fa-sign-out"></i> Log out</a>
         </div>
         {% else %}
         <H1

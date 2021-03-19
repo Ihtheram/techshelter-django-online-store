@@ -78,6 +78,12 @@ class OrderInfo(models.Model):
 		cart_item_quantity=sum([orderedtech.quantity for orderedtech in orderedtechs])
 		return cart_item_quantity
 
+	@property
+	def get_ordered_item_quantity(self):#get number of items in cart
+		orderedtechs = self.orderedtech.objects.get(complete=True) # reverse relation with OrderedTech (get all the OrderedTech objects belong to a single OrderInfo object)
+		ordered_item_quantity=sum([orderedtech.quantity for orderedtech in orderedtechs])
+		return ordered_item_quantity
+
 #Each items in cart
 class OrderedTech(models.Model):
 	tech = models.ForeignKey(Tech, on_delete=models.SET_NULL, null=True)
