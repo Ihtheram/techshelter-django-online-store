@@ -49,7 +49,7 @@ class Tech(models.Model):
 
 #Each order given by a particular user(customer)
 class OrderInfo(models.Model):
-	customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+	customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 	date_ordered = models.DateTimeField(auto_now_add=True)
 	complete = models.BooleanField(default=False)
 	transaction_id = models.CharField(max_length=100, null=True)
@@ -78,15 +78,9 @@ class OrderInfo(models.Model):
 		cart_item_quantity=sum([orderedtech.quantity for orderedtech in orderedtechs])
 		return cart_item_quantity
 
-	@property
-	def get_ordered_item_quantity(self):#get number of items in cart
-		orderedtechs = self.orderedtech.objects.get(complete=True) # reverse relation with OrderedTech (get all the OrderedTech objects belong to a single OrderInfo object)
-		ordered_item_quantity=sum([orderedtech.quantity for orderedtech in orderedtechs])
-		return ordered_item_quantity
-
 #Each items in cart
 class OrderedTech(models.Model):
-	tech = models.ForeignKey(Tech, on_delete=models.SET_NULL, null=True)
+	tech = models.ForeignKey(Tech, on_delete=models.CASCADE, null=True)
 	order = models.ForeignKey(OrderInfo, on_delete=models.SET_NULL, null=True)
 	quantity = models.IntegerField(default=0, null=True, blank=True)
 	date_added = models.DateTimeField(auto_now_add=True)
@@ -97,7 +91,7 @@ class OrderedTech(models.Model):
 		return total_price
 	
 class DeliveryLocation(models.Model):
-	customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	customer = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	order = models.ForeignKey(OrderInfo, on_delete=models.SET_NULL, null=True)
 	address = models.CharField(max_length=200, null=False)
 	city = models.CharField(max_length=200, null=False)

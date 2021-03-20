@@ -105,6 +105,8 @@ def orders(request):
         items = orderinfo.orderedtech_set.all()
         orderedtechs = OrderedTech.objects.all()
 
+        orderhistory = OrderInfo.objects.filter(customer=logged_in_user, complete=True)
+
     else:
         logged_in_user = {
 			'name':'guest',
@@ -114,8 +116,8 @@ def orders(request):
         orderinfo = {'get_cart_total_price': 0, 'get_cart_item_quantity': 0, 'shipping': False}
         items = []
         orderedtechs = []
-    
-    context = {'logged_in_user':logged_in_user, 'items':items, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
+        orderhistory = []
+    context = {'logged_in_user':logged_in_user, 'items':items, 'orderedtechs':orderedtechs,'orderinfo':orderinfo, 'orderhistory':orderhistory}
     return render(request, 'TechShelterApp/orders.html',context)
 
 def orders_received(request):
@@ -126,10 +128,15 @@ def orders_received(request):
         items = orderinfo.orderedtech_set.all()
         orderedtechs = OrderedTech.objects.all()
 
+        # ordered = OrderInfo.objects.get(complete=True)
+        # mytechs = Tech.objects.get(seller=logged_in_user)
+        # mytechsordered = OrderedTech.objects.filter(order=ordered, tech=mytechs)
+        
         rcv_ord_quantity = 0
         for orderedtech in orderedtechs:
             if orderedtech.order.complete and orderedtech.tech.seller.username == logged_in_user.username:
                 rcv_ord_quantity+=1
+
 
 
     else:
@@ -214,6 +221,8 @@ def checkout(request):
                     newDelivery.order = orderinfo
                     newDelivery.save()
             techs = Tech.objects.all()
+            orderinfo, created = OrderInfo.objects.get_or_create(customer=logged_in_user, complete=False)
+            orderedtechs = orderinfo.orderedtech_set.all()
             context = {'techs':techs, 'logged_in_user':logged_in_user, 'orderedtechs':orderedtechs,'orderinfo':orderinfo}
             return render(request, 'TechShelterApp/tech_shelter.html',context)
     else:
